@@ -1,30 +1,36 @@
 package main
 
 import (
-        "fmt"
-	"bytes"
 	"bufio"
+	"bytes"
+	"flag"
+	"fmt"
+	"github.com/fsouza/go-dockerclient"
 	"os"
-        "github.com/fsouza/go-dockerclient"
 )
+
 //ref https://github.com/fsouza/go-dockerclient
 
 func main() {
+	var container string
+	flag.StringVar(&container, "c", "test1", "container name")
+
+	flag.Parse()
+
 	createOpts := docker.CreateExecOptions{
-		//Container:    "d0655935ca3ceb01af621e871e05c3d03bd533c2132562ac1622cd3a8ae2730d",
-		Container:    "test1",
+		Container:    container,
 		Cmd:          []string{"ifconfig"},
 		AttachStdin:  false,
 		AttachStdout: true,
 		AttachStderr: true,
 		Tty:          false,
 	}
-        endpoint := "unix:///var/run/docker.sock"
-        client, _ := docker.NewClient(endpoint)
+	endpoint := "unix:///var/run/docker.sock"
+	client, _ := docker.NewClient(endpoint)
 	execObj, err := client.CreateExec(createOpts)
 	if err != nil {
 		fmt.Println("failed to run in container - Exec setup failed - %v", err)
-		os.Exit(1)	
+		os.Exit(1)
 	}
 
 	var buf bytes.Buffer
@@ -42,8 +48,8 @@ func main() {
 	}()
 	err = <-errChan
 	if err != nil {
-	        fmt.Println("failed to run in container - Exec start failed - %v", err)
-                os.Exit(1)
+		fmt.Println("failed to run in container - Exec start failed - %v", err)
+		os.Exit(1)
 	}
 	wrBuf.Flush()
 	//data := buf.Bytes()
