@@ -10,14 +10,12 @@ import (
 
 func main() {
 	const jsonStream = `
-		{"Name": "Ed", "Text": "Knock knock."}
-		{"Name": "Sam", "Text": "Who's there?"}
-		{"Name": "Ed", "Text": "Go fmt."}
-		{"Name": "Sam", "Text": "Go fmt who?"}
-		{"Name": "Ed", "Text": "Go fmt yourself!"}
+		{"Name": "Ed", "Text": "Knock knock.", "Valid": true}
+		{"Name": "Ed", "Text": "Go fmt yourself!", "Valid": true}
 	`
 	type Message struct {
 		Name, Text string
+        Valid bool
 	}
 	dec := json.NewDecoder(strings.NewReader(jsonStream))
 	for {
@@ -27,6 +25,7 @@ func main() {
 		} else if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("%s: %s\n", m.Name, m.Text)
+		fmt.Printf("%v\n", m)
+		//fmt.Printf("%s: %s\n", m.Name, m.Text)
 	}
 }
