@@ -14,7 +14,7 @@ secret_key = 'RRNJf2XP64k4L4108v1Fod4Y/I6iy0lFFEYiku3u'
 conn = boto.connect_s3(
         aws_access_key_id = access_key,
         aws_secret_access_key = secret_key,
-        host = 's3-sz.hub.oa.com',
+        host = 'xxxx',
         is_secure=False,
         calling_format = boto.s3.connection.OrdinaryCallingFormat(),
         )
